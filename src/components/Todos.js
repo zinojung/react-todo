@@ -1,11 +1,9 @@
 import React from 'react';
 import TodoItem from './TodoItem';
-const Todos = () => {
+const Todos = (props) => {
     return (
         <div>
-            <TodoItem />
-            <TodoItem />
-            <TodoItem />
+            {props.todos.map((todo) => <TodoItem key={todo.text} todo={todo}/>)}
         </div>
     )
 }

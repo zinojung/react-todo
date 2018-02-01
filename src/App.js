@@ -5,12 +5,43 @@ import Todos from './components/Todos';
 // import './App.css';
 
 class App extends Component {
+  constructor(prop) {
+    super(prop);
+    this.state = {
+      todos: [
+        {
+          text: "test todo 1",
+          isCompleted: false
+        },
+        {
+          text: "test todo 2",
+          isCompleted: false
+        },
+      ]
+    };
+    this.addTodo = this.addTodo.bind(this);
+  }
+  addTodo = (newTodo) => {
+
+    if(!newTodo) {
+      return "Type anything!";
+    } 
+
+    const template = {
+      text: newTodo,
+      isCompleted: false
+    }
+
+    this.setState((prev) => {
+      return { todos: prev.todos.concat(template) } ;
+    });
+  }
   render() {
     return (
       <div>
         <h1>Todo List</h1>
-        <AddTodo />
-        <Todos />
+        <AddTodo addTodo={this.addTodo} />
+        <Todos todos={this.state.todos} />
       </div>
     );
   }
