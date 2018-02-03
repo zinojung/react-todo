@@ -3,7 +3,7 @@ import AddTodo from './components/AddTodo';
 import Todos from './components/Todos';
 import uuid from 'uuid';
 // import logo from './logo.svg';
-// import './App.css';
+import './App.css';
 
 class App extends Component {
   constructor(prop) {
@@ -13,6 +13,7 @@ class App extends Component {
     };
     this.addTodo = this.addTodo.bind(this);
     this.removeTodo = this.removeTodo.bind(this);
+    this.makeCompletedTodo = this.makeCompletedTodo.bind(this);
   }
 
   componentDidMount() {
@@ -62,6 +63,20 @@ class App extends Component {
         todos:  prev.todos.filter((todo) => ( todo.id !== id ))
     }));
   }
+  makeCompletedTodo = (id) => {
+    this.setState((prevState) => {
+      const newTodos = prevState.todos.map((todo) => {
+        if(todo.id === id) {
+          todo.isCompleted = !todo.isCompleted
+          return todo;
+        }
+        return todo;
+      });
+      return {
+        todos: newTodos
+      }
+    });
+  }
   render() {
     return (
       <div>
@@ -70,6 +85,7 @@ class App extends Component {
         <Todos 
           todos={this.state.todos} 
           removeTodo={this.removeTodo}
+          makeCompletedTodo={this.makeCompletedTodo}
         />
       </div>
     );

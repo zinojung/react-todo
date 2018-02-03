@@ -1,5 +1,7 @@
 import React from 'react';
 import TodoItem from './TodoItem';
+
+
 const Todos = (props) => {
     return (
         <div>
@@ -9,6 +11,7 @@ const Todos = (props) => {
                         key={todo.text} 
                         todo={todo}
                         removeTodo={props.removeTodo}
+                        makeCompletedTodo={props.makeCompletedTodo}
                     />
                 );
             })}
