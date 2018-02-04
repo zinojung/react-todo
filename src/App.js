@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import AddTodo from './components/AddTodo';
 import Todos from './components/Todos';
 import uuid from 'uuid';
+import update from 'immutability-helper';
 // import logo from './logo.svg';
 import './App.css';
 
@@ -15,7 +16,7 @@ class App extends Component {
     this.removeTodo = this.removeTodo.bind(this);
     this.makeCompletedTodo = this.makeCompletedTodo.bind(this);
   }
-
+ 
   componentDidMount() {
     try {
       const json = localStorage.getItem("todos");
@@ -32,6 +33,15 @@ class App extends Component {
     if(prevState.todos.length !== this.state.todos.length) {
       const json = JSON.stringify(this.state.todos);
       localStorage.setItem("todos", json);
+    } else {
+      const prevCompletedState = prevState.todos.map((todo) => ( todo.isCompleted ));
+      const thisCompletedState = this.state.todos.map((todo) => ( todo.isCompleted ));
+      for(let i = 0; i < this.state.todos.length; i++) {
+        if(prevCompletedState[i] !== thisCompletedState[i]) {
+          const json = JSON.stringify(this.state.todos);
+          localStorage.setItem("todos", json);
+        }
+      }
     }
   }
   
@@ -63,20 +73,20 @@ class App extends Component {
         todos:  prev.todos.filter((todo) => ( todo.id !== id ))
     }));
   }
-  makeCompletedTodo = (id) => {
-    this.setState((prevState) => {
-      const newTodos = prevState.todos.map((todo) => {
-        if(todo.id === id) {
-          todo.isCompleted = !todo.isCompleted
-          return todo;
-        }
-        return todo;
-      });
-      return {
-        todos: newTodos
-      }
+
+  makeCompletedTodo = (id) => { 
+    const todos = this.state.todos;
+    const todoIndex = todos.findIndex((todo) => {
+      return todo.id === id;
     });
+
+    const updatedTodo = update(todos[todoIndex], {isCompleted: {$set: !todos[todoIndex].isCompleted}})
+    const newTodos = update(todos, {
+      $splice: [[todoIndex, 1, updatedTodo]]
+    });
+    this.setState({todos: newTodos});
   }
+
   render() {
     return (
       <div>
