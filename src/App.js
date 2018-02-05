@@ -59,6 +59,12 @@ class App extends Component {
 
     return "";
   }
+  handleRemoveCategory = (id) => {
+    const categories = this.state.categories.filter((category) => {
+      return category.id !== id;
+    }) 
+    this.setState({ categories });
+  }
   /* 
     Todos Functions
   */
@@ -70,6 +76,7 @@ class App extends Component {
         <Categories 
           categories={this.state.categories}
           handleAddCategory={this.handleAddCategory}
+          handleRemoveCategory={this.handleRemoveCategory}
         />
         {
           this.state.categories.map((category) => {

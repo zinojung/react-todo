@@ -18,10 +18,13 @@ export default class Categories extends React.Component {
                 />
                 {
                     this.props.categories.map((category) => {
-                        return <CategoryItem 
-                            category={category}
-                            key={category.id}
-                            />
+                        return (
+                            <CategoryItem 
+                                category={category}
+                                key={category.id}
+                                handleRemoveCategory={this.props.handleRemoveCategory}
+                                />
+                        )
                     })
                 }
             </div>
