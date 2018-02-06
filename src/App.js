@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Categories from './components/Categories';
 import Todos from './components/Todos';
 import uuid from 'uuid';
+import update from 'immutability-helper';
 import './App.css';
 
 class App extends Component {
@@ -12,7 +13,7 @@ class App extends Component {
             {
                 id: uuid(),
                 title: "오늘할일",
-                selected: false, 
+                isSelected: false, 
                 todos: [
                     {id: "idid1", text:"오늘 고등어사기", isCompleted: false},
                     {id: "idid2", text:"text todo222!", isCompleted: false}
@@ -21,14 +22,15 @@ class App extends Component {
             {
                 id: uuid(),
                 title: "쇼핑목록", 
-                selected: true, 
+                isSelected: true, 
                 todos: [
                     {id: "idid1", text:"text todo!", isCompleted: false},
-                    {id: "idid2", text:"text todo222!", isCompleted: false}
+                    {id: "idid2", text:"text tdfwf!", isCompleted: false}
                 ]
             }
         ]
     }
+    this.handleSelectCategory = this.handleSelectCategory.bind(this);
   }
   /* 
     Categories Functions
@@ -49,7 +51,7 @@ class App extends Component {
     const newCategory ={
         id: uuid(),
         title: newCategoryName, 
-        selected: false, 
+        isSelected: false, 
         todos: []
     }
 
@@ -65,6 +67,24 @@ class App extends Component {
     }) 
     this.setState({ categories });
   }
+  handleSelectCategory = (id) => {
+    const data = this.state.categories;
+    // Reset isSelected of categories
+    const resetedCategories = data.map((category) => {
+      return update(category, {isSelected: {$set: false}});
+    });
+    // this.setState({ categories: resetedCategories });
+    
+    // Update isSelected to true
+    const foundIndex = data.findIndex((category) => {
+      return category.id === id;
+    });
+    const updatedCategory = update(data[foundIndex], {isSelected: {$set: true}});
+    var newData = update(resetedCategories, {
+      $splice: [[foundIndex, 1, updatedCategory]]
+    });
+    this.setState({categories: newData});
+  }
   /* 
     Todos Functions
   */
@@ -77,15 +97,17 @@ class App extends Component {
           categories={this.state.categories}
           handleAddCategory={this.handleAddCategory}
           handleRemoveCategory={this.handleRemoveCategory}
+          handleSelectCategory={this.handleSelectCategory}
         />
         {
           this.state.categories.map((category) => {
-            if(category.selected) {
+            if(category.isSelected) {
               return <Todos key={category.id} category={category}/>
             }
             return "";
           })
         }
+        <button onClick={() => { console.log(this.state.categories); }}>Console.log State</button>
       </div>
     );
   }

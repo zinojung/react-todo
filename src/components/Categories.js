@@ -2,11 +2,6 @@ import React from 'react';
 import AddCategory from './AddCategory';
 import CategoryItem from './CategoryItem';
 
-
-// Categories: [
-//    {title: "오늘할일", todos: []}
-//]
-
 export default class Categories extends React.Component {
 
     render() {
@@ -23,6 +18,7 @@ export default class Categories extends React.Component {
                                 category={category}
                                 key={category.id}
                                 handleRemoveCategory={this.props.handleRemoveCategory}
+                                handleSelectCategory={this.props.handleSelectCategory}
                                 />
                         )
                     })

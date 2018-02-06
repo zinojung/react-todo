@@ -1,16 +1,17 @@
 import React from 'react';
 
 const CategoryItem = (props) => {
-    const handleClick = () => {
-        const id = props.category.id;
+    const id = props.category.id;
+    const handleSelectCategory = () => {
+        props.handleSelectCategory(id);
+    }
+    const handleRemoveButton = () => {
         props.handleRemoveCategory(id);
     }
     return (
         <div>
-            <h4>
-                {props.category.title}
-                <button onClick={handleClick}>Remove</button>
-            </h4>
+            <h4 onClick={handleSelectCategory}>{props.category.title}</h4>
+            <button onClick={handleRemoveButton}>Remove</button>
         </div>
     );
 }
