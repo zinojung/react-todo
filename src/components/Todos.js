@@ -6,12 +6,16 @@ import AddTodo from './AddTodo';
 const Todos = (props) => {
     return (
         <div>
-            <AddTodo />
+            <AddTodo 
+                handleAddTodo={props.handleAddTodo}
+                categoryId={props.category.id}
+            />
             {props.category.todos.map((todo) => {
                 return (
                     <TodoItem 
                         key={todo.text} 
                         todo={todo}
+                        categoryId={props.category.id}
                     />
                 );
             })}

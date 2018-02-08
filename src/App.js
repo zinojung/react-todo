@@ -88,6 +88,35 @@ class App extends Component {
   /* 
     Todos Functions
   */
+  handleAddTodo = (newTodo, categoryId) => {
+    if(!newTodo) {
+      return "Type anything!"
+    }
+    const data = this.state.categories;
+
+    const selectedCategory = data.filter((category) => {
+      return category.id === categoryId;
+    })[0];
+
+    const duplicatedTodo = selectedCategory.todos.filter((todo) => {
+      return todo.text === newTodo;
+    });
+
+    if(duplicatedTodo.length > 0) {
+      return "Already Exist Todo!";
+    }
+    const foundIndexOfCategory = this.state.categories.findIndex((category) => {
+      return category.id === categoryId;
+    });
+    
+    const templateTodo = {id: uuid(), text: newTodo , isCompleted: false}
+    const newCategory = update(data[foundIndexOfCategory], {todos: {$push: [templateTodo]}});
+    var newData = update(data, {
+      $splice: [[foundIndexOfCategory, 1, newCategory]]
+    });
+    this.setState({categories: newData});
+  }
+
   render() {
     return (
       <div>
@@ -102,7 +131,13 @@ class App extends Component {
         {
           this.state.categories.map((category) => {
             if(category.isSelected) {
-              return <Todos key={category.id} category={category}/>
+              return (
+                <Todos 
+                  key={category.id} 
+                  category={category}
+                  handleAddTodo={this.handleAddTodo}
+                />
+              ) 
             }
             return "";
           })
